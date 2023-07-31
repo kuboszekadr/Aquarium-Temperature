@@ -39,15 +39,15 @@ Events::EventType Sensors::Thermometer::checkTrigger()
 
 bool Sensors::Thermometer::makeReading()
 {
-  // check if device can be requested
-  // if (!_sensor->available())
-  // {
-  //   return false;
-  // }
-
   _sensor->requestTemperatures();
+  float temp = _sensor->getTempCByIndex(0);
 
-  _readings[0] += _sensor->getTempCByIndex(0); // insert new reading data
+  if (temp == DEVICE_DISCONNECTED_C)
+  {
+    return false;
+  }
+
+  _readings[0] += temp; // insert new reading data
   _readings_count++;
 
   _last_reading = millis();
